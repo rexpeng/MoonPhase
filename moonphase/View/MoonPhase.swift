@@ -11,6 +11,7 @@ import UIKit
 @IBDesignable
 class MoonPhase: UIView {
     let synmonth = 29.530588853
+
     
     var date: Date = Date() {
         didSet {
@@ -71,6 +72,10 @@ class MoonPhase: UIView {
     
     
     override func draw(_ rect: CGRect) {
+        let imageData = moonImage.data(using: .utf8)
+        let decodeData = Data(base64Encoded: imageData!)
+        let image = UIImage(data: decodeData!)
+        //let image = UIImage(named: "moon")
         backgroundColor = .clear
         layer.sublayers = nil
         let componts = Calendar.current.dateComponents([.year, .month, .day], from: date)
@@ -106,7 +111,7 @@ class MoonPhase: UIView {
         let blackLayer = CAShapeLayer()
         blackLayer.path = blackPath.cgPath
         blackLayer.fillColor = blackColor.cgColor
-        layer.addSublayer(blackLayer)
+        //layer.addSublayer(blackLayer)
         
         let whitePath = UIBezierPath()
         if ad == 0 {
@@ -127,8 +132,14 @@ class MoonPhase: UIView {
         let moonLayer = CAShapeLayer()
         moonLayer.path = whitePath.cgPath
         moonLayer.fillColor = whiteColor.cgColor
-        layer.addSublayer(moonLayer)
+        //layer.addSublayer(moonLayer)
         
+        let imageLayer = CALayer()
+        imageLayer.frame = CGRect(x: center.x-radius, y: center.y-radius, width: radius*2, height: radius*2)
+        imageLayer.position = center
+        imageLayer.contents = image?.cgImage
+        imageLayer.mask = moonLayer
+        layer.addSublayer(imageLayer)
         // method 2
 //        let ovalWidth = CGFloat(sqrtf(Float(radius*radius))*cosf(Float(phai)))
 //        let mPath = UIBezierPath(ovalIn: CGRect(x: center.x-ovalWidth, y: center.y-radius, width: ovalWidth*2, height: radius*2))

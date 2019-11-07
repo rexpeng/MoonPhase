@@ -14,6 +14,7 @@
 		91ECBD8B237275CB00CDC0D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91ECBD8A237275CB00CDC0D9 /* Assets.xcassets */; };
 		91ECBD8E237275CB00CDC0D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91ECBD8C237275CB00CDC0D9 /* LaunchScreen.storyboard */; };
 		91ECBD96237275EB00CDC0D9 /* MoonPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ECBD95237275EB00CDC0D9 /* MoonPhase.swift */; };
+		91ECBD9923740FA200CDC0D9 /* moonImagePng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ECBD9823740FA200CDC0D9 /* moonImagePng.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		91ECBD8D237275CB00CDC0D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91ECBD8F237275CB00CDC0D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91ECBD95237275EB00CDC0D9 /* MoonPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonPhase.swift; sourceTree = "<group>"; };
+		91ECBD9823740FA200CDC0D9 /* moonImagePng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moonImagePng.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				91ECBD95237275EB00CDC0D9 /* MoonPhase.swift */,
+				91ECBD9823740FA200CDC0D9 /* moonImagePng.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -153,6 +156,7 @@
 				91ECBD82237275CA00CDC0D9 /* AppDelegate.swift in Sources */,
 				91ECBD84237275CA00CDC0D9 /* SceneDelegate.swift in Sources */,
 				91ECBD96237275EB00CDC0D9 /* MoonPhase.swift in Sources */,
+				91ECBD9923740FA200CDC0D9 /* moonImagePng.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,6 +303,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6VMACRJDJ6;
 				INFOPLIST_FILE = moonphase/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -317,6 +322,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6VMACRJDJ6;
 				INFOPLIST_FILE = moonphase/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
