@@ -80,8 +80,8 @@ class MoonPhase: UIView {
         let phai = CGFloat(p) * 2.0 * CGFloat.pi
         
         var ad: CGFloat = 0
-        let blackColor = moonBackgroundColor.withAlphaComponent(1)
-        let whiteColor = moonForegroundColor.withAlphaComponent(1)
+        let blackColor = moonBackgroundColor//.withAlphaComponent(1)
+        let whiteColor = moonForegroundColor//.withAlphaComponent(1)
         var colorIndex = 0
         if phai <= 0.5*CGFloat.pi {
             colorIndex = 0
@@ -97,35 +97,82 @@ class MoonPhase: UIView {
             ad=1;
         }
         
+        //let aDegree = CGFloat.pi / 180
         let center = CGPoint(x: rect.width*0.5, y: rect.height*0.5)
         let radius = min(rect.width, rect.height)*0.5
-        let ovalWidth = CGFloat(sqrtf(Float(radius*radius))*cosf(Float(phai)))
         
-        let mPath = UIBezierPath(ovalIn: CGRect(x: center.x-ovalWidth, y: center.y-radius, width: ovalWidth*2, height: radius*2))
-        let blackPath = UIBezierPath()
-        blackPath.addArc(withCenter: center, radius: radius, startAngle: (0.5+ad)*CGFloat.pi, endAngle: (1.5+ad)*CGFloat.pi, clockwise: true)
-        let whitePath = UIBezierPath()
-        whitePath.addArc(withCenter: center, radius: radius, startAngle: (1.5+ad)*CGFloat.pi, endAngle: (2.5+ad)*CGFloat.pi, clockwise: true)
-        if colorIndex == 1 {
-            whitePath.append(mPath)
-        } else {
-            blackPath.append(mPath)
-        }
-        
+        // method 1
+        let blackPath = UIBezierPath(arcCenter: center, radius: radius, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
         let blackLayer = CAShapeLayer()
         blackLayer.path = blackPath.cgPath
         blackLayer.fillColor = blackColor.cgColor
-
-        let whiteLayer = CAShapeLayer()
-        whiteLayer.path = whitePath.cgPath
-        whiteLayer.fillColor = whiteColor.cgColor
+        layer.addSublayer(blackLayer)
         
-        if colorIndex == 1 {
-            layer.addSublayer(blackLayer)
-            layer.addSublayer(whiteLayer)
+        let whitePath = UIBezierPath()
+        if ad == 0 {
+            whitePath.addArc(withCenter: center, radius: radius, startAngle: (1.5+ad)*CGFloat.pi, endAngle: (2.5+ad)*CGFloat.pi, clockwise: true)
         } else {
-            layer.addSublayer(whiteLayer)
-            layer.addSublayer(blackLayer)
+            whitePath.addArc(withCenter: center, radius: radius, startAngle: (2.5+ad)*CGFloat.pi, endAngle: (1.5+ad)*CGFloat.pi, clockwise: false)
         }
+        var y: CGFloat = radius
+        while y >= -radius {
+            let m = CGFloat(sqrtf(Float(radius*radius-CGFloat(y*y)))*cosf(Float(phai)))
+            if ad == 0 {
+                whitePath.addLine(to: CGPoint(x: center.x+m, y: center.y+CGFloat(y)))
+            } else {
+                whitePath.addLine(to: CGPoint(x: center.x-m, y: center.y+CGFloat(y)))
+            }
+            y -= 0.1
+        }
+        let moonLayer = CAShapeLayer()
+        moonLayer.path = whitePath.cgPath
+        moonLayer.fillColor = whiteColor.cgColor
+        layer.addSublayer(moonLayer)
+        
+        // method 2
+//        let ovalWidth = CGFloat(sqrtf(Float(radius*radius))*cosf(Float(phai)))
+//        let mPath = UIBezierPath(ovalIn: CGRect(x: center.x-ovalWidth, y: center.y-radius, width: ovalWidth*2, height: radius*2))
+//        let blackPath = UIBezierPath()
+//        blackPath.addArc(withCenter: center, radius: radius, startAngle: (0.5+ad)*CGFloat.pi, endAngle: (1.5+ad)*CGFloat.pi, clockwise: true)
+//        let whitePath = UIBezierPath()
+//        whitePath.addArc(withCenter: center, radius: radius, startAngle: (1.5+ad)*CGFloat.pi, endAngle: (2.5+ad)*CGFloat.pi, clockwise: true)
+//        if colorIndex == 1 {
+//            whitePath.append(mPath)
+//        } else {
+//            blackPath.append(mPath)
+//        }
+//
+//        let blackLayer = CAShapeLayer()
+//        blackLayer.path = blackPath.cgPath
+//        blackLayer.fillColor = blackColor.cgColor
+//
+//        let whiteLayer = CAShapeLayer()
+//        whiteLayer.path = whitePath.cgPath
+//        whiteLayer.fillColor = whiteColor.cgColor
+//
+//        if colorIndex == 1 {
+//            layer.addSublayer(blackLayer)
+//            layer.addSublayer(whiteLayer)
+//        } else {
+//            layer.addSublayer(whiteLayer)
+//            layer.addSublayer(blackLayer)
+//        }
     }
+    
+    func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
+        return CGPoint(x: (p1.x+p2.x)*0.5, y: (p1.y+p2.y)*0.5)
+    }
+    
+    func controlPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
+        var controlPoint = midPointForPoints(p1: p1, p2: p2)
+        let diffY = abs(p2.y - controlPoint.y)
+        if p1.y < p2.y {
+            controlPoint.y += diffY
+        } else {
+            controlPoint.y -= diffY
+        }
+        return controlPoint
+    }
+    
+
 }
