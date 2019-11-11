@@ -11,6 +11,8 @@ import UIKit
 class ViewController: UIViewController {
     
     var moonView: MoonPhase!
+    var picker: UIDatePicker!
+    var timer: Timer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +20,7 @@ class ViewController: UIViewController {
         
         setupMonPhaseView()
         setupDatePicker()
+        setupTimer()
     }
 
     func setupMonPhaseView() {
@@ -27,13 +30,15 @@ class ViewController: UIViewController {
         
         moonView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         moonView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -200).isActive = true
-        moonView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5, constant: 0).isActive = true
+        moonView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.25, constant: 0).isActive = true
         moonView.widthAnchor.constraint(equalTo: moonView.heightAnchor).isActive = true
+        
+        moonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleTimer)))
     }
     
     func setupDatePicker() {
-        let picker = UIDatePicker()
-        picker.datePickerMode = .date
+        picker = UIDatePicker()
+        picker.datePickerMode = .dateAndTime
         picker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(picker)
         picker.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -44,6 +49,27 @@ class ViewController: UIViewController {
     
     @objc func dateChanged(_ sender: UIDatePicker) {
         moonView.date = sender.date
+    }
+    
+    func setupTimer() {
+        if timer != nil {
+            timer.invalidate()
+            timer = nil
+        }
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
+            let date = self.picker.date
+            self.moonView.date = date
+            self.picker.date = date.addingTimeInterval(86400)
+        })
+    }
+    
+    @objc func toggleTimer() {
+        if timer != nil {
+            timer.invalidate()
+            timer = nil
+        } else {
+            setupTimer()
+        }
     }
 }
 
